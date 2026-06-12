@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>大学満足度アンケート</title>
+
+<style>
+body{
+    font-family: sans-serif;
+    margin: 30px;
+}
+
+.container{
+    width: 500px;
+    margin: auto;
+}
+
+.question{
+    margin-bottom: 20px;
+}
+
+textarea{
+    width: 100%;
+    height: 80px;
+}
+
+button{
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#complete{
+    display: none;
+    text-align: center;
+    font-size: 24px;
+    margin-top: 100px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="survey">
+
+    <h2>大学満足度アンケート</h2>
+
+    <!-- 学年 -->
+    <div class="question">
+        <p>1. 学年を選んでください</p>
+
+        <label><input type="radio" name="grade" value="1年">1年</label>
+        <label><input type="radio" name="grade" value="2年">2年</label>
+        <label><input type="radio" name="grade" value="3年">3年</label>
+        <label><input type="radio" name="grade" value="4年">4年</label>
+        <label><input type="radio" name="grade" value="修士">修士</label>
+    </div>
+
+    <!-- 満足度 -->
+    <div class="question">
+        <p>2. 満足度を選んでください（5が最高）</p>
+
+        <label><input type="radio" name="satisfaction" value="1">1</label>
+        <label><input type="radio" name="satisfaction" value="2">2</label>
+        <label><input type="radio" name="satisfaction" value="3">3</label>
+        <label><input type="radio" name="satisfaction" value="4">4</label>
+        <label><input type="radio" name="satisfaction" value="5">5</label>
+    </div>
+
+    <!-- 好きな授業 -->
+    <div class="question">
+        <p>3. 好きな授業を書いてください</p>
+       <textarea id="favoriteClass"></textarea>
+    </div>
+
+    <!-- コメント -->
+    <div class="question">
+        <p>4. コメントを書いてください</p>
+        <textarea id="comment"></textarea>
+    </div>
+
+    <button onclick="submitSurvey()">送信</button>
+
+</div>
+
+
+
+<!-- 送信後画面 -->
+<div id="complete">
+    <h2>送信できました。</h2>
+</div>
+
+<script><!-- アンケート送信後の処理 -->
+
+function submitSurvey() {
+
+    const grade =
+      document.querySelector('input[name="grade"]:checked');
+
+    const satisfaction =
+      document.querySelector('input[name="satisfaction"]:checked');
+
+    if (!grade || !satisfaction) {
+        alert("学年と満足度を選択してください");
+        return;
+    }
+
+    const favoriteClass =
+      document.getElementById("favoriteClass").value;
+
+    const comment =
+      document.getElementById("comment").value;
+
+    fetch("https://script.google.com/macros/s/AKfycbyl6WW2dRiYX0_W4uFfIyRlpbUbx6jiCk-8x_7V_jsuksH7Uux2KJpXEvGa1ZkvT1TF/exec", {
+        method: "POST",
+        body: JSON.stringify({
+            grade: grade.value,
+            satisfaction: satisfaction.value,
+            favoriteClass: favoriteClass,
+            comment: comment
+        })
+    })
+    .then(() => {
+
+        document.getElementById("survey").style.display = "none";
+        document.getElementById("complete").style.display = "block";
+
+    })
+    .catch(error => {
+        alert("送信エラー");
+        console.log(error);
+    });
+}
+</script>
+
+</body>
+</html>
