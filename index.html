@@ -86,8 +86,13 @@ button{
 
 
 <!-- 送信後画面 -->
-<div id="complete">
+<div id="complete" style="display:none;">
     <h2>送信できました。</h2>
+
+    <p id="resultGrade"></p>
+    <p id="resultSatisfaction"></p>
+    <p id="resultFavorite"></p>
+    <p id="resultComment"></p>
 </div>
 
 <script><!-- アンケート送信後の処理 -->
@@ -114,6 +119,8 @@ function submitSurvey() {
     fetch("https://script.google.com/macros/s/AKfycbyl6WW2dRiYX0_W4uFfIyRlpbUbx6jiCk-8x_7V_jsuksH7Uux2KJpXEvGa1ZkvT1TF/exec", {
         method: "POST",
         body: JSON.stringify({
+
+
             grade: grade.value,
             satisfaction: satisfaction.value,
             favoriteClass: favoriteClass,
@@ -121,6 +128,17 @@ function submitSurvey() {
         })
     })
     .then(() => {
+        document.getElementById("resultGrade").innerText =
+    "学年：" + grade.value;
+
+document.getElementById("resultSatisfaction").innerText =
+    "満足度：" + satisfaction.value;
+
+document.getElementById("resultFavorite").innerText =
+    "好きな授業：" + favoriteClass;
+
+document.getElementById("resultComment").innerText =
+    "コメント：" + comment;
 
         document.getElementById("survey").style.display = "none";
         document.getElementById("complete").style.display = "block";
@@ -132,6 +150,6 @@ function submitSurvey() {
     });
 }
 </script>
-
+<script src="script.js"></script>
 </body>
 </html>
